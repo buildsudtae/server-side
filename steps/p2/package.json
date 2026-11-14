@@ -1,0 +1,12 @@
+{
+  "name": "p2-steps",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "v1": "node server_v1.js",
+    "v2": "node server_v2.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ch0-express-basic",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

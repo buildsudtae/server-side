@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8" /><title><%= title %></title></head>
+<body>
+  <%- include('partials/header') %>
+
+  <h1><%= title %></h1>
+  <p>ชื่อผู้ใช้: <%= user.name %></p>
+
+  <% if (loggedIn) { %>
+    <p>ยินดีต้อนรับ</p>
+  <% } %>
+
+  <% if (age >= 18) { %>
+    <p>คุณบรรลุนิติภาวะแล้ว</p>
+  <% } else { %>
+    <p>ยังไม่ถึงเกณฑ์</p>
+  <% } %>
+
+  <ul>
+    <% products.forEach(function(item) { %>
+      <li><%= item %></li>
+    <% }) %>
+  </ul>
+
+  <p>escape: <%= htmlContent %></p>
+  <p>raw: <%- htmlContent %></p>
+</body>
+</html>

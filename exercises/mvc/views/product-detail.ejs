@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title><%= product.name %></title>
+    <link rel="stylesheet" href="/css/products.css">
+</head>
+
+<body>
+    <a href="/">← กลับหน้ารวม</a>
+    <div class="card">
+        <img src="<%= product.image_url %>" alt="<%= product.name %>" />
+        <h3><%= product.name %></h3>
+        <p><%= Number(product.price).toLocaleString() %> บาท</p>
+        <% if (product.discount) { %>
+            <p>ส่วนลด <%= product.discount %> บาท</p>
+        <% } else { %>
+            <p>ไม่มีส่วนลด</p>
+        <% } %>
+        <p>รีวิว <%= product.review_count || 0 %> รายการ</p>
+    </div>
+</body>
+
+</html>
