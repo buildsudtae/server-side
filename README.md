@@ -1,11 +1,10 @@
 # คู่มือทำแลปทีละขั้น — Jest · API Testing · MVC · Cookies
 
-คู่มือนี้พาทำทั้ง 4 แลปของวิชา Server-Side Web Development **ตั้งแต่โฟลเดอร์ว่างตามลำดับสไลด์** ทุกขั้นมี:
+ขั้นตอนทำทั้ง 4 แลป **ตั้งแต่โฟลเดอร์ว่างตามลำดับสไลด์** (ไม่มีทฤษฎี — ทฤษฎีอยู่ในเล่มสรุป) ทุกขั้นมี:
 
 1. **คำสั่ง** ที่ต้องพิมพ์
 2. **โค้ดเต็ม** ที่ copy ไปวางได้ทันที
-3. **อธิบาย** ว่าโค้ด/คำสั่งนั้นทำอะไร
-4. ✅ **จุดเช็ค** — วิธีทดสอบ และผลที่ต้องเห็น ถ้าไม่ตรงให้หยุดแก้ก่อนไปขั้นถัดไป
+3. ✅ **จุดเช็ค** — วิธีทดสอบ และผลที่ต้องเห็น ถ้าไม่ตรงให้หยุดแก้ก่อนไปขั้นถัดไป
 
 ท้ายแต่ละแลปมี **Exercise / Assignment ในสไลด์** และ **โจทย์ประยุกต์ (จากเล่มสรุป)** พร้อมวิธีทำและเฉลย
 
@@ -59,7 +58,7 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 ## แลป 1 · Unit Testing with Jest
 
-สไลด์ 10 · เป้าหมาย: เขียน **test case** ให้ฟังก์ชันด้วย Jest ครอบคลุม **Positive / Negative / Boundary** ใช้ **AAA Pattern**, `describe()`, `it()` และ **Matchers**
+สไลด์ 10
 
 ### 1.1 สร้างโปรเจค (สไลด์ "Setup")
 
@@ -70,10 +69,6 @@ npm init -y
 npm install -D jest
 code .
 ```
-
-- `npm init -y` สร้าง `package.json` (ไฟล์บอกข้อมูลโปรเจค + รายการ package) โดยตอบ yes ทุกคำถาม
-- `npm install -D jest` ติดตั้ง Jest เป็น **devDependencies** (`-D`) = ใช้ตอนพัฒนา/ทดสอบเท่านั้น จะได้โฟลเดอร์ `node_modules`
-- `code .` เปิดโฟลเดอร์นี้ใน VS Code
 
 เปิด `package.json` แก้ส่วน `"scripts"` จาก `"test": "echo \"Error: no test specified\" && exit 1"` ให้เป็น `"test": "jest"` (หรือพิมพ์คำสั่ง `npm pkg set scripts.test=jest` แทนการแก้มือ):
 
@@ -89,7 +84,7 @@ code .
 
 ### 1.2 เทสแรก: `sum.js` + `sum.test.js`
 
-โครงสร้างที่สไลด์ใช้: ไฟล์ฟังก์ชัน `xxx.js` วางคู่กับไฟล์เทส `xxx.test.js` (Jest จะหาไฟล์ที่ลงท้าย `.test.js` เอง)
+สร้าง 2 ไฟล์ในโฟลเดอร์ `my-testing`:
 
 📄 **ไฟล์ `sum.js`**
 
@@ -119,15 +114,6 @@ test("-1 + 1 = 0", () => {
 });
 ```
 
-**อ่านโค้ดเทส:**
-
-| ส่วน | ความหมาย |
-|---|---|
-| `require("./sum")` | นำเข้าฟังก์ชันที่ `module.exports` ไว้ (ถ้าลืม export จะได้ `TypeError: sum is not a function`) |
-| `test("2 + 3 = 5", () => {...})` | สร้าง **Test Case** 1 ข้อ + ชื่อที่โชว์ตอนรัน (`it()` ใช้แทนได้) |
-| `expect(sum(2, 3))` | ค่าจริง (actual) ที่ได้จากการเรียกฟังก์ชัน |
-| `.toBe(5)` | **Matcher** + ค่าที่คาดหวัง (expected) — ทั้งประโยคเรียกว่า **assertion** |
-
 ```powershell
 npm test
 ```
@@ -138,11 +124,8 @@ npm test
 > Test Suites: 1 passed, 1 total
 > Tests:       3 passed, 3 total
 > ```
-> **Test Suite** = 1 ไฟล์ .test.js, **Tests** = จำนวน test() ทั้งหมด
 
 ### 1.3 AAA Pattern: `calculateDiscount`
-
-**A**rrange (เตรียมข้อมูล) → **A**ct (เรียกฟังก์ชัน) → **A**ssert (ตรวจผล)
 
 📄 **ไฟล์ `calculateDiscount.js`**
 
@@ -187,8 +170,6 @@ test("non-member should pay full price", () => {
 });
 ```
 
-เทสที่ 2 (non-member) เพิ่มจากสไลด์ เพื่อให้ทดสอบครบทั้ง 2 branch ของ `if/else`
-
 ```powershell
 npm test
 ```
@@ -199,7 +180,7 @@ npm test
 
 **Requirement (สไลด์):** Username must contain 5–20 characters, contain only letters, numbers, and underscore, must not contain spaces, and must start with a letter.
 
-ออกแบบเคสก่อนเขียนโค้ด:
+Test case ที่ต้องเขียน (ตารางในสไลด์):
 
 | No | Input | Test Case | Expected |
 |---|---|---|---|
@@ -243,9 +224,6 @@ function validateUsername(username) {
 
 module.exports = validateUsername;
 ```
-
-- `/^[A-Za-z]/` — `^` คือ "ต้นข้อความ" ตามด้วยตัวอักษร 1 ตัว → ต้องขึ้นต้นด้วยตัวอักษร
-- `/^[A-Za-z0-9_]+$/` — ทั้งข้อความ (`^...$`) ประกอบด้วย a-z A-Z 0-9 _ อย่างน้อย 1 ตัว (`+`) → ช่องว่างและ `@` จึงไม่ผ่าน
 
 📄 **ไฟล์ `validateUsername.test.js`**
 
@@ -297,8 +275,6 @@ describe("validateUsername", () => {
 });
 ```
 
-`describe("ชื่อกลุ่ม", () => {...})` ใช้ **จัดกลุ่ม** test ที่เกี่ยวข้องกัน มีหลาย describe ในไฟล์เดียวได้
-
 ```powershell
 npm test
 npx jest validateUsername --verbose
@@ -308,7 +284,7 @@ npx jest validateUsername --verbose
 
 ### 1.5 Boundary Value: `validatePassword`
 
-**Requirement:** Password must contain at least 8 characters. — Bug มักเกิดที่ขอบ `<, <=, >, >=` จึงต้องทดสอบ **7 | 8 | 9** เสมอ
+**Requirement:** Password must contain at least 8 characters. (ทดสอบขอบ 6 | 7 | **8** | 9 | 10)
 
 📄 **ไฟล์ `validatePassword.js`**
 
@@ -381,7 +357,7 @@ npm test
     Received: false
 ```
 
-= Code I ผิดตรงขอบ 8 ตัว (ถ้าเทสแค่ 10 กับ 3 ตัวจะไม่มีวันเจอ) — ดูแล้ว **แก้กลับเป็น `>=`**
+ดูแล้ว **แก้กลับเป็น `>=`**
 
 ### 1.6 คำสั่ง Jest ที่ควรรู้
 
@@ -391,24 +367,13 @@ npm test
 | `npx jest sum` | รันเฉพาะไฟล์ที่ชื่อมีคำว่า sum |
 | `npx jest --verbose` | แสดงชื่อทุก test |
 | `npx jest --coverage` | รายงาน % ของโค้ดที่ถูกทดสอบ (สร้างโฟลเดอร์ `coverage/`) |
-| `npx jest --watch` | รันใหม่อัตโนมัติเมื่อแก้ไฟล์ (กด q เพื่อออก) |
+| `npx jest --watchAll` | รันใหม่อัตโนมัติเมื่อแก้ไฟล์ (กด q เพื่อออก) — `--watch` เฉย ๆ ใช้ได้เฉพาะโฟลเดอร์ที่เป็น git repo |
 
 ### 1.7 Exercise ในสไลด์
 
-#### Quiz 1–7 (เฉลย)
-
-| Quiz | คำตอบ | เหตุผล |
-|---|---|---|
-| 1. Unit Test คืออะไร | **Test small unit independently** | ทดสอบหน่วยเล็กแยกเดี่ยว ไม่ใช่ทั้งระบบ/UI/deploy |
-| 2. `expect(add(2, 3)).toBe(5);` อะไรคือ assertion | ทั้งประโยค `expect(...).toBe(5)` (ส่วน `toBe(5)` คือ matcher ที่ยืนยันค่า) | `add(2,3)` คือค่าจริง |
-| 3–4. Object ใช้ matcher ใด | **`toEqual()`** | `toBe` เทียบ reference — object เนื้อหาเหมือนกันแต่คนละตัวจะไม่ผ่าน |
-| 5. Negative test ของ "รหัสผ่าน ≥ 8 ตัว" | **Password 3 characters** | เป็นค่าที่ระบบต้องปฏิเสธ |
-| 6. ATM ถอนได้สูงสุด 20,000 — Negative test | **ถอน 25,000 บาท** | เกินเงื่อนไข |
-| 7. `add(a, b)` ต้องทดสอบ boundary ไหม | **ไม่ต้อง** | ไม่มีเงื่อนไข/ขอบเขต |
-
 #### Project Work: นำเสนอผลการทดสอบอย่างน้อย 5 features
 
-สไลด์ยกตัวอย่าง `validateUsername()` (valid / invalid character / length boundary) และ `canAccessAdmin()` (Admin / normal user) — ตัวอย่างฉบับเต็ม 7 ฟังก์ชัน:
+ตัวอย่างฉบับเต็ม 7 ฟังก์ชัน (สร้าง 2 ไฟล์):
 
 📄 **ไฟล์ `features.js`**
 
@@ -598,13 +563,6 @@ describe("getStudent (object -> toEqual)", () => {
 });
 ```
 
-**จุดสำคัญในไฟล์นี้**
-
-- `test.each([[17, false], [18, true], ...])("isAdult(%i) should be %s", ...)` = รันเทสเดียวกับหลายชุดข้อมูล เหมาะกับ boundary (`%i` แทนตัวเลข `%s` แทน string ในชื่อเทส)
-- `expect(() => divide(10, 0)).toThrow("Cannot divide by zero")` — **ต้องห่อด้วย `() =>`** ไม่งั้น error จะเกิดก่อน `expect` จับได้และเทสพัง
-- `toThrow(RangeError)` ตรวจชนิด error, `toThrow("ข้อความ")` ตรวจข้อความ
-- object ใช้ `toEqual`, สมาชิกใน array ใช้ `toContain`
-
 ```powershell
 npm test
 ```
@@ -617,8 +575,6 @@ npm test
 1. `isPalindrome(text)` อ่านกลับหลังเหมือนเดิม ไม่สนตัวพิมพ์เล็ก-ใหญ่/ช่องว่าง/เครื่องหมาย ถ้าไม่ใช่ string ให้ throw `TypeError`
 2. `calculateBMI(weight, height)` = น้ำหนัก ÷ ส่วนสูง² ถ้าค่า ≤ 0 ให้ throw `"Invalid input"`
 3. `calculateShipping(total)` ยอด ≥ 1000 ส่งฟรี (0) น้อยกว่านั้น 50 บาท ยอดติดลบ throw `RangeError`
-
-**วิธีคิด:** อ่าน requirement → หา "ตัวเลขขอบ" (1000) → เขียนตาราง Positive/Negative/Boundary (999 | 1000 | 1001) → แปลงแต่ละแถวเป็น `test()`
 
 **เฉลย:**
 
@@ -710,7 +666,7 @@ npx jest exercises
 
 ## แลป 2 · API Testing (Postman)
 
-สไลด์ 11 · แลปนี้ **ไม่ต้องเขียนโค้ดเซิร์ฟเวอร์** — ฝึกส่ง request ด้วย **curl** และ **Postman** ไปยัง API จริง แล้วอ่าน response / status code / หาบั๊ก โดยใช้แอป **ToDo App** (repo `djwester/todo-list-testing` เขียนด้วย Python FastAPI) ที่รันบน **GitHub Codespaces**
+สไลด์ 11 · ใช้ **curl** + **Postman** ยิงไปที่แอป **ToDo App** (repo `djwester/todo-list-testing`) บน **GitHub Codespaces** — ไม่ต้องเขียนโค้ดเซิร์ฟเวอร์
 
 ### 2.1 Exercise: เรียก API ด้วย curl
 
@@ -746,7 +702,7 @@ curl.exe https://dog.ceo/api/breeds/image/random
 </soap12:Envelope>
 ```
 
-   → Send → ได้ XML รายชื่อประเทศ (SOAP = XML ล้วน, endpoint เดียว, ใช้ POST)
+   → Send → ได้ XML รายชื่อประเทศ
 4. **GraphQL:** POST `https://countries.trevorblades.com/graphql` → **Body → GraphQL** → ช่อง QUERY วาง:
 
 ```graphql
@@ -764,7 +720,7 @@ query {
 }
 ```
 
-   → Send → ได้ข้อมูลประเทศไทยเฉพาะ field ที่ขอ (GraphQL ให้ client เลือก field เองได้)
+   → Send → ได้ข้อมูลประเทศไทยเฉพาะ field ที่ขอ
 
 ### 2.3 เปิดแอป ToDo บน GitHub Codespaces
 
@@ -829,13 +785,9 @@ make run-dev
 
 ### 2.8 Testing Secure APIs: Basic Auth / Base64
 
-Authentication = **Who are you?** · Authorization = **What can you do?** (แท็บ Authorization ใน Postman มีหลายแบบ: Basic, Bearer, API Key, OAuth ...)
-
 1. GET `https://postman-echo.com/basic-auth` → Authorization → **Basic Auth** → Username `postman` Password `password` → Send → `{"authenticated": true}`
 2. ดูแท็บ **Headers (hidden)** ของ request จะเห็น `Authorization: Basic cG9zdG1hbjpwYXNzd29yZA==`
 3. นำ `cG9zdG1hbjpwYXNzd29yZA==` ไปถอดที่ https://www.base64decode.org → ได้ `postman:password`
-
-> 💡 **Base64 ไม่ใช่ encryption** แค่ encoding ถอดกลับได้ทันที → Basic Auth ต้องใช้ผ่าน **HTTPS** เสมอ
 
 ### 2.9 Testing GET calls / Testing PUT calls (ตารางในสไลด์)
 
@@ -915,14 +867,7 @@ npx newman run todo.postman_collection.json --env-var baseUrl=https://xxxx-8000.
 
 ## แลป 3 · MVC + EJS
 
-สไลด์ 12 · เป้าหมาย: นำโปรเจค Product API ที่ **ทุกอย่างอยู่ใน `index.js` ไฟล์เดียว** มาแยกเป็น **configs / routes / controllers / models / views / public** ตามแนวคิด **M**odel–**V**iew–**C**ontroller แล้วเพิ่มหน้าเว็บด้วย **EJS**
-
-| ส่วน | หน้าที่ | ไฟล์ในแลปนี้ |
-|---|---|---|
-| **Model** | จัดการข้อมูล/SQL ทำงานเมื่อ Controller ขอ | `models/productModel.js` |
-| **View** | หน้าตาที่ผู้ใช้เห็น | `views/products.ejs` |
-| **Controller** | สมองกลาง รับ request → เรียก Model → ส่งผลให้ View/JSON | `controllers/productController.js` |
-| (Routes) | จับคู่ URL → ฟังก์ชันใน Controller | `routes/productRoutes.js`, `routes/webRoutes.js` |
+สไลด์ 12 · แยกโปรเจค Product API จาก `index.js` ไฟล์เดียว → configs / routes / controllers / models / views / public แล้วเพิ่มหน้าเว็บ EJS
 
 > 💡 สไลด์ให้ดาวน์โหลด project ตั้งต้นจาก Google Drive ของอาจารย์ (มี `.env`, `docker-compose.yaml`, `index.js`) — ถ้ามีไฟล์นั้นใช้ได้เลยแต่ต้องแก้ `.env` ให้ตรงกับ docker-compose ของอาจารย์ คู่มือนี้สร้าง project ตั้งต้นให้เองใน 3.1 เพื่อให้ทำได้แม้ไม่มีไฟล์จาก Drive
 
@@ -935,8 +880,6 @@ npm init -y
 npm install express mysql2 dotenv
 code .
 ```
-
-- `express` = web framework · `mysql2` = เชื่อม MySQL · `dotenv` = อ่านค่าจากไฟล์ `.env` เข้า `process.env`
 
 สร้างไฟล์ฐานข้อมูล 3 ไฟล์:
 
@@ -994,9 +937,6 @@ DB_PASSWORD=apppass
 DB_NAME=product_db
 ```
 
-- `docker-compose.yml` สั่งรัน MySQL 8.0 เปิด port 3306 สร้าง database `product_db` + user `appuser`/`apppass` และ **รัน `init.sql` อัตโนมัติครั้งแรก** (ไฟล์ที่วางใน `/docker-entrypoint-initdb.d/`)
-- `init.sql` บรรทัดแรก `SET NAMES utf8mb4;` ทำให้ภาษาไทยไม่เพี้ยน · `id` เป็น `VARCHAR(36)` รองรับ UUID · `is_deleted` ใช้ทำ **soft delete** (ไม่ลบจริง แค่ซ่อน)
-
 เปิดฐานข้อมูล (Docker Desktop ต้องเปิดอยู่):
 
 ```powershell
@@ -1004,7 +944,7 @@ docker compose up -d
 docker compose logs -f db
 ```
 
-รอจนเห็นบรรทัด `ready for connections` (ครั้งแรกประมาณ 20–40 วินาที เพราะต้องโหลด image + รัน init.sql) แล้วกด <kbd>Ctrl</kbd>+<kbd>C</kbd> ออกจาก log (database ยังรันอยู่เบื้องหลัง)
+รอจนเห็นบรรทัด `ready for connections` ที่ลงท้ายด้วย **`port: 3306`** (ครั้งแรกประมาณ 20–40 วินาที — จะมี `ready for connections ... port: 0` ขึ้นก่อน 1 ครั้งระหว่างรัน init.sql ยังไม่ใช่) แล้วกด <kbd>Ctrl</kbd>+<kbd>C</kbd> ออกจาก log (database ยังรันอยู่เบื้องหลัง)
 
 > ⚠️ ถ้าขึ้น `port is already allocated` แปลว่าเครื่องมี MySQL/XAMPP ใช้ 3306 อยู่ → ปิดตัวนั้น หรือแก้ใน docker-compose เป็น `"3307:3306"` แล้วแก้ `.env` เป็น `DB_PORT=3307`
 
@@ -1151,8 +1091,6 @@ db.connect(err => {
 
 module.exports = db;
 ```
-
-- `module.exports = db;` ส่งออก connection ให้ไฟล์อื่น `require` ไปใช้ (Node จะ cache ไว้ ทุกไฟล์ได้ connection เดียวกัน)
 
 แก้ `index.js`: **ลบ** บรรทัด `require('mysql2')`, `require('dotenv')`, `dotenv.config()`, ก้อน `mysql.createConnection({...})` และ `db.connect(...)` ทิ้ง แล้ว **เพิ่ม** `const db = require('./configs/db');` — ได้ไฟล์แบบนี้:
 
@@ -1343,7 +1281,7 @@ app.listen(PORT, () => {
 });
 ```
 
-- `app.use('/api', productRoutes);` = **ทุก route ใน productRoutes จะมี prefix `/api`** → `router.get('/products')` กลายเป็น `GET /api/products`
+
 
 ```powershell
 node index.js
@@ -1356,7 +1294,7 @@ node index.js
 
 ### 3.4 Step 3 — สร้าง Controller (ย้ายส่วนที่ไม่ใช่เส้นทาง)
 
-ย้าย **ฟังก์ชัน `(req, res) => {...}`** ของแต่ละ route ไปเป็นเมธอดใน object `productController` — route จะเหลือแค่ "URL → ชื่อเมธอด"
+ย้ายฟังก์ชัน `(req, res) => {...}` ของแต่ละ route ไปไว้ใน controller แล้วแก้ route ให้เรียกเมธอด:
 
 📄 **ไฟล์ `controllers/productController.js`** — Step 3 (Controller ยังคุย DB เอง)
 
@@ -1448,8 +1386,6 @@ router.put('/products/restore/:id', productController.restoreProduct);
 module.exports = router;
 ```
 
-- `productController.getAllProducts` ส่ง **ชื่อฟังก์ชัน (ไม่มีวงเล็บ)** ให้ Express เรียกเองเมื่อมี request — ถ้าเขียน `getAllProducts()` จะถูกเรียกทันทีตอน start แล้วพัง
-- เมธอดใน object คั่นด้วย `,` (ลืม `,` = SyntaxError)
 - สไลด์มี `router.get('/products/:id', ...)` ซ้ำ 2 บรรทัด — ตัดเหลือบรรทัดเดียว
 
 ```powershell
@@ -1464,7 +1400,7 @@ node index.js
 npm install uuid
 ```
 
-Model รวม SQL ทุกตัว แต่ละเมธอดรับ `callback` แล้วส่งต่อให้ `db.query(query, params, callback)`:
+สร้าง Model:
 
 📄 **ไฟล์ `models/productModel.js`** — Step 4
 
@@ -1524,7 +1460,7 @@ const Product = {
 module.exports = Product;
 ```
 
-Controller เปลี่ยนมาเรียก Model (ไม่มี SQL แล้ว):
+แก้ Controller ให้เรียก Model:
 
 📄 **ไฟล์ `controllers/productController.js`** — Step 4
 
@@ -1608,13 +1544,9 @@ const productController = {
 module.exports = productController;
 ```
 
-- `?` ใน SQL = placeholder ป้องกัน **SQL Injection** ค่าจริงใส่ใน array ตามลำดับ
-- `{ v4: uuidv4 }` = destructuring เอา `v4` จากแพ็กเกจ uuid มาตั้งชื่อ `uuidv4` → `uuidv4()` สร้าง id สุ่มให้สินค้าใหม่
-- `createProduct` เช็ค `name` / `price` ก่อน ถ้าไม่มีตอบ **400**
-
 > ⚠️ uuid เวอร์ชัน 12 ขึ้นไปเป็น ESM — Node 22.12+ ใช้ `require('uuid')` ได้ ถ้า Node เก่ากว่าแล้วเจอ `ERR_REQUIRE_ESM` ให้ `npm install uuid@9`
 
-ทดสอบด้วย **REST Client** — สร้างไฟล์ `request.rest` แล้วกด **Send Request** (ตัวหนังสือเล็กที่ขึ้นเหนือแต่ละ request):
+สร้างไฟล์ `request.rest` สำหรับทดสอบด้วย REST Client (กด **Send Request** เหนือแต่ละ request):
 
 📄 **ไฟล์ `request.rest`**
 
@@ -1680,14 +1612,6 @@ node index.js
 npm install ejs
 ```
 
-**EJS tags ที่ใช้บ่อย** (สไลด์ Embedded JavaScript Templates):
-
-| Tag | ความหมาย | ตัวอย่าง |
-|---|---|---|
-| `<%= x %>` | แสดงค่าแบบ **escape** (ปลอดภัยจาก XSS) | `<p><%= user.name %></p>` |
-| `<%- x %>` | แสดงแบบ **ไม่ escape** (HTML จริง) / ใช้กับ include | `<%- include('partials/header') %>` |
-| `<% code %>` | ใส่ JavaScript **ไม่แสดงผล** (if / loop) | `<% products.forEach(p => { %> ... <% }) %>` |
-
 1) เพิ่มเมธอดใน **Model** (วางต่อจาก `restore` ก่อน `};` บรรทัดสุดท้าย):
 
 ```js
@@ -1709,8 +1633,6 @@ npm install ejs
     });
   },
 ```
-
-- `res.render('products', {...})` = render ไฟล์ `views/products.ejs` และส่งตัวแปร `products` เข้าไปใน template (ชื่อ key = ชื่อตัวแปรใน ejs)
 
 3) สร้าง route ของหน้าเว็บ:
 
@@ -1834,9 +1756,6 @@ app.listen(PORT, () => {
 });
 ```
 
-- `app.set('views', path.join(__dirname, 'views'))` = ไฟล์ view อยู่ที่โฟลเดอร์ `views` ข้างไฟล์นี้
-- `app.set('view engine', 'ejs')` = `res.render('products')` จะหา `products.ejs` เอง
-
 ```powershell
 node index.js
 ```
@@ -1958,8 +1877,6 @@ app.listen(PORT, () => {
 });
 ```
 
-- `express.static('public')` เสิร์ฟไฟล์ในโฟลเดอร์ public ตรง ๆ → `public/css/products.css` เปิดได้ที่ `/css/products.css` (href **ไม่ต้องมีคำว่า public**)
-
 ```powershell
 node index.js
 ```
@@ -1983,8 +1900,6 @@ product-api/
 ```
 
 ### 3.8 โจทย์ประยุกต์ (เล่มสรุป) + เฉลย
-
-> สูตรเพิ่ม feature แบบ MVC: **Model** (เพิ่มเมธอด SQL) → **Controller** (เรียก Model แล้วตอบ) → **Route** (ผูก URL) → **View** (ถ้าเป็นหน้าเว็บ)
 
 **โจทย์ 1:** `GET /api/products/:id` ถ้าไม่พบให้ตอบ **404** `{ "error": "Product not found" }` (ตอนนี้ตอบ `{}` สถานะ 200)
 
@@ -2137,7 +2052,7 @@ module.exports = router;
 
 ## แลป 4 · Cookies (Project I + Project II)
 
-สไลด์ 13 · ทฤษฎีสั้น ๆ: **Cookie** = ข้อมูลเล็ก ๆ ที่ **browser เก็บไว้** แล้วส่งกลับไปกับทุก request ถัดไป → ใช้จำ **Session ID** ว่าใคร login อยู่ · **ห้ามเก็บ** password (แม้เป็น hash), เลขบัตร, ข้อมูลอ่อนไหว, secret key, **role/สิทธิ์ เช่น `isAdmin=true`**
+สไลด์ 13
 
 ### 4.1 แลปทดลอง: ขโมย Session ที่ the-internet.herokuapp.com
 
@@ -2149,8 +2064,6 @@ module.exports = router;
 6. ใน Incognito เปิด DevTools → Application → Cookies → แก้/เพิ่ม `rack.session` ให้ Value = ค่าที่ copy มา → F5 → **เข้า Secure Area ได้โดยไม่ต้องใส่รหัส** = Session Hijacking
 7. แท็บ **Network** → คลิก request `secure` → Request Headers มี `Cookie: rack.session=...`
 
-> 💡 หมายเหตุสไลด์: rack.session จะถูกส่งค่าใหม่มาแทนค่าเดิมทุก response และถ้าใส่ค่าผิดเว็บจะ redirect ไป /login — บทเรียน: ใครได้ session id ไปก็สวมรอยเราได้ จึงต้องตั้ง **HttpOnly + Secure** และใช้ HTTPS
-
 ### 4.2 Project I — Session Cookie + Role (Admin / Lecturer / Student)
 
 ```powershell
@@ -2160,8 +2073,6 @@ npm init -y
 npm install express cors cookie-parser
 code .
 ```
-
-- `cors` อนุญาตให้หน้าเว็บคนละ origin (Live Server port 5500) เรียก API (port 3000) · `cookie-parser` แปลง header `Cookie` เป็น `req.cookies`
 
 **Frontend:**
 
@@ -2237,14 +2148,6 @@ adminBtn.addEventListener("click", () => {
 });
 ```
 
-| จุดสำคัญ | ความหมาย |
-|---|---|
-| `<script src="client.js" defer>` | โหลด script หลัง HTML พร้อม → `getElementById` หาปุ่มเจอ |
-| `method: "POST"` + `body: JSON.stringify({ username })` | ส่ง JSON `{"username":"Admin"}` ไป `/login` |
-| `"Content-Type": "application/json"` | บอก server ว่า body เป็น JSON |
-| **`credentials: "include"`** | **ให้ browser แนบ/รับ Cookie แม้เป็น Cross-Origin** — ไม่ใส่ request จะไม่มีบรรทัด `Cookie: sessionId=...` |
-| `.then((res) => res.text())` | แปลง response เป็นข้อความ เช่น "Authed as Admin" แล้วแสดงใน div |
-
 **Backend:**
 
 📄 **ไฟล์ `server.js`** — ตามสไลด์ (ยังมีปัญหา — แก้ใน 4.3)
@@ -2306,16 +2209,6 @@ app.listen(3000, () => {
 });
 ```
 
-| บรรทัด | ความหมาย |
-|---|---|
-| `cors({ origin: "http://127.0.0.1:5500", credentials: true })` | อนุญาตเฉพาะหน้าเว็บจาก Live Server (**ต้องตรงตัวอักษร** — `localhost:5500` ถือว่าคนละ origin) และยอมให้ส่ง cookie |
-| `USERS` (Map) | ฐานข้อมูล user จำลอง มีแค่ Admin กับ Lecturer (ไม่มี Student) |
-| `SESSIONS` (Map) | **เก็บ session ฝั่ง server**: sessionId → user |
-| `crypto.randomUUID()` | สร้าง session id สุ่ม (UUID v4) เดาไม่ได้ |
-| `res.cookie("sessionId", sessionId, {...})` | ส่ง `Set-Cookie` ให้ browser เก็บ — `secure` ส่งผ่าน HTTPS เท่านั้น (ยกเว้น localhost) · `httpOnly` JavaScript อ่านผ่าน `document.cookie` ไม่ได้ · `sameSite: "none"` อนุญาต cross-site (ต้องคู่กับ secure) |
-| `/adminData` | อ่าน `req.cookies.sessionId` → หา user → ไม่มี session **401 Unauthorized** · ไม่ใช่ Admin **403 Forbidden** · ผ่าน → ส่งข้อมูล |
-| `return` หลัง sendStatus | **จำเป็น** ไม่งั้นโค้ดไหลไปส่ง response ซ้ำ → `ERR_HTTP_HEADERS_SENT` |
-
 **รัน:**
 
 ```powershell
@@ -2353,8 +2246,6 @@ node server.js
     return res.sendStatus(401);               // Login ไม่สำเร็จ
   }
 ```
-
-- `res.clearCookie` ต้องใส่ option **เดียวกับตอนตั้ง** cookie ไม่งั้น browser ไม่ลบ (server จะส่ง `Set-Cookie: sessionId=; Expires=Thu, 01 Jan 1970 ...`)
 
 ### 4.4 เพิ่มปุ่ม Logout (ต่อยอดจากเล่มสรุป)
 
@@ -2507,8 +2398,6 @@ code .
   },
 ```
 
-- `npm run dev` = `node --watch` รีสตาร์ท server อัตโนมัติเมื่อแก้ไฟล์ (หรือใช้ `"dev": "nodemon server.js"` ก็ได้ เพราะติดตั้ง nodemon แล้ว)
-
 **ขั้นที่ 1 — GET /users**
 
 📄 **ไฟล์ `server.js`** — v1
@@ -2551,7 +2440,7 @@ Content-Type: application/json
 }
 ```
 
-สร้าง `request.rest` เริ่มจากแค่ request แรก (`### Get all users` + `GET http://localhost:3000/users`) ก่อนก็ได้ — **REST Client** = ส่ง HTTP request ได้โดยไม่ต้องเขียนหน้าเว็บ · `###` คั่นแต่ละ request · ระหว่าง header กับ body **ต้องเว้น 1 บรรทัด**
+สร้าง `request.rest` (เริ่มจาก request แรกก่อนก็ได้) — ระหว่าง header กับ body **ต้องเว้น 1 บรรทัด**
 
 ```powershell
 npm run dev
@@ -2590,8 +2479,6 @@ app.listen(3000);
 > ✅ **จุดเช็ค:** (`npm run dev` รีสตาร์ทให้เองเมื่อกด Save) Send **Create a new user** → `HTTP/1.1 201 Created` → Send **Get all users** → `[{"name":"Elon Musk","password":"syntaxerror"}]` — เห็นรหัสจริง = ถ้าฐานข้อมูลหลุด รหัสหลุดทันที
 
 **ขั้นที่ 3 — ทดลอง bcrypt (`learn.js`)**
-
-Plaintext → Encryption (ถอดกลับได้ถ้ามี key) → **Hashing** (ทางเดียว ถอดกลับไม่ได้) · bcrypt hash ยาว 60 ตัว = `$2b$` (version) + `10$` (cost) + salt 22 ตัว + hash 31 ตัว
 
 📄 **ไฟล์ `learn.js`**
 
@@ -2675,15 +2562,6 @@ app.post("/users/login", async (req, res) => {
 
 app.listen(3000);
 ```
-
-| บรรทัด | ความหมาย |
-|---|---|
-| `async (req, res)` | ต้องเป็น async เพราะข้างในใช้ `await` |
-| `await bcrypt.genSalt()` | สร้าง salt (default cost 10) |
-| `await bcrypt.hash(req.body.password, salt)` | hash รหัส แล้วเก็บ hash แทนรหัสจริง |
-| `users.find((user) => user.name === req.body.name)` | หา user ตามชื่อ — **ต้องใช้ `===`** |
-| `await bcrypt.compare(plain, hash)` | เทียบรหัสที่พิมพ์กับ hash → true/false |
-| `catch` → 500 | กัน server ล่ม เช่นไม่ส่ง password มา |
 
 > ⚠️ สไลด์หน้า 50 เขียน `users.find(user => user.name = req.body.name)` (ใช้ `=` กำหนดค่า) → find คืน user คนแรกเสมอ และ **เปลี่ยนชื่อเขา** — ทดสอบแล้ว: login ชื่อ "Nobody" ด้วยรหัสของ Elon ได้ `Success`! ไฟล์ข้างบนแก้เป็น `===` แล้ว
 
@@ -2785,10 +2663,6 @@ app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
 ```
-
-- โจทย์ 1: `USERS.set("Student", ...)` + เช็คหลาย role ด้วย `["Lecturer", "Admin"].includes(user.role)`
-- โจทย์ 2: `/me` คืน `res.json(user)` จาก session
-- โจทย์ 3: `maxAge: 60 * 1000` (หน่วย **มิลลิวินาที** ใน Express) → header จะเป็น `Max-Age=60; Expires=...` — ไม่ใส่ maxAge = session cookie หายเมื่อปิด browser
 
 **ทดสอบ:** รัน `node server.js` + เปิด index.html ด้วย Live Server → Login as Student → เปิดแท็บใหม่ไปที่ `http://localhost:3000/me` และ `http://localhost:3000/lecturerData` (หรือทดสอบด้วย curl ใน **Git Bash** ตามด้านล่าง — `-c`/`-b jar.txt` = เก็บ/ส่ง cookie แบบที่ browser ทำ)
 
@@ -2906,10 +2780,6 @@ app.post("/logout", (req, res) => {
 
 app.listen(3000, () => console.log("Server running on port 3000"));
 ```
-
-- **middleware** `requireLogin(req, res, next)` ตรวจ session ถ้าผ่านเก็บ user ไว้ใน `req.user` แล้ว `next()` ไปฟังก์ชันถัดไป → ใช้ซ้ำได้ทุก route: `app.get("/profile", requireLogin, handler)`
-- `requireRole("Admin")` เป็นฟังก์ชันที่ **คืน middleware** (รับพารามิเตอร์ได้) วางต่อกันได้หลายตัว
-- cookie ใช้ `sameSite: "strict"` เพราะไม่มีหน้าเว็บข้าม origin
 
 ```bash
 curl -c jar.txt -b jar.txt -X POST localhost:3000/users -H "Content-Type: application/json" -d '{"name":"somchai","password":"P@ssw0rd"}'
